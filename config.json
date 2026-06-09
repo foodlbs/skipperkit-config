@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "apps": [
+    {
+      "packageName": "com.netflix.mediaclient",
+      "locale": "en",
+      "skipIntroViewIds": ["skipCreditsButtonTestTag"],
+      "skipIntroLabels": ["Skip Intro", "SKIP INTRO"],
+      "skipRecapViewIds": ["skipCreditsButtonTestTag"],
+      "skipRecapLabels": ["Skip Recap", "SKIP RECAP"],
+      "nextEpisodeViewIds": ["NextEpisodeButtonTestTag"],
+      "nextEpisodeLabels": ["Next Episode"],
+      "enabled": true,
+      "autoNextEnabled": false
+    },
+    {
+      "packageName": "com.amazon.avod.thirdpartyclient",
+      "locale": "en",
+      "skipIntroViewIds": ["test_tag:contextualButton_Overlay:contextualButton_Panel:contextualButton_skip_intro_Button"],
+      "skipIntroLabels": ["Skip Intro"],
+      "skipRecapViewIds": ["test_tag:contextualButton_Overlay:contextualButton_Panel:contextualButton_skip_recap_Button"],
+      "skipRecapLabels": ["Skip Recap"],
+      "nextEpisodeViewIds": [],
+      "nextEpisodeLabels": [],
+      "nextEpisodeLabelPrefixes": ["Next up:"],
+      "enabled": true,
+      "autoNextEnabled": false
+    },
+    {
+      "packageName": "com.disney.disneyplus",
+      "locale": "en",
+      "skipIntroViewIds": ["com.disney.disneyplus:id/skipIntro"],
+      "skipIntroLabels": ["Skip Intro"],
+      "skipRecapViewIds": ["com.disney.disneyplus:id/skipRecap"],
+      "skipRecapLabels": ["Skip Recap"],
+      "nextEpisodeViewIds": ["com.disney.disneyplus:id/upNextLiteButton"],
+      "nextEpisodeLabels": ["Next Episode"],
+      "enabled": true,
+      "autoNextEnabled": false
+    },
+    {
+      "packageName": "com.crunchyroll.crunchyroid",
+      "locale": "en",
+      "skipIntroViewIds": [],
+      "skipIntroLabels": ["Skip Intro", "Skip Opening"],
+      "skipRecapViewIds": [],
+      "skipRecapLabels": ["Skip Recap"],
+      "nextEpisodeViewIds": [],
+      "nextEpisodeLabels": [],
+      "enabled": true,
+      "autoNextEnabled": false
+    },
+    {
+      "packageName": "com.wbd.stream",
+      "locale": "en",
+      "skipIntroViewIds": [],
+      "skipIntroLabels": ["Skip Intro"],
+      "skipRecapViewIds": [],
+      "skipRecapLabels": ["Skip Recap"],
+      "nextEpisodeViewIds": [],
+      "nextEpisodeLabels": [],
+      "enabled": true,
+      "autoNextEnabled": false
+    },
+    {
+      "packageName": "com.hulu.plus",
+      "locale": "en",
+      "skipIntroViewIds": [],
+      "skipIntroLabels": ["Skip Intro"],
+      "skipRecapViewIds": [],
+      "skipRecapLabels": ["Skip Recap"],
+      "nextEpisodeViewIds": [],
+      "nextEpisodeLabels": [],
+      "enabled": true,
+      "autoNextEnabled": false
+    },
+    {
+      "packageName": "com.cbs.app",
+      "locale": "en",
+      "skipIntroViewIds": [],
+      "skipIntroLabels": ["Skip Intro"],
+      "skipRecapViewIds": [],
+      "skipRecapLabels": ["Skip Recap"],
+      "nextEpisodeViewIds": [],
+      "nextEpisodeLabels": [],
+      "enabled": true,
+      "autoNextEnabled": false
+    },
+    {
+      "packageName": "com.peacocktv.peacockandroid",
+      "locale": "en",
+      "skipIntroViewIds": [],
+      "skipIntroLabels": ["Skip Intro"],
+      "skipRecapViewIds": [],
+      "skipRecapLabels": ["Skip Recap"],
+      "nextEpisodeViewIds": [],
+      "nextEpisodeLabels": [],
+      "enabled": true,
+      "autoNextEnabled": false
+    },
+    {
+      "packageName": "com.apple.atve.androidtv.appletv",
+      "locale": "en",
+      "skipIntroViewIds": [],
+      "skipIntroLabels": ["Skip Intro"],
+      "skipRecapViewIds": [],
+      "skipRecapLabels": ["Skip Recap"],
+      "nextEpisodeViewIds": [],
+      "nextEpisodeLabels": [],
+      "enabled": true,
+      "autoNextEnabled": false
+    }
+  ]
+}
