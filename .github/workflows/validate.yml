@@ -1,0 +1,15 @@
+name: Validate
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  schema:
+    runs-on: ubuntu-latest
+    steps:
+      # actions/checkout@v6
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10
+      - name: Validate config.json schema
+        run: python3 scripts/validate_config.py
