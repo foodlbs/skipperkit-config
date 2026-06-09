@@ -176,7 +176,8 @@
       "locale": "en",
       "skipIntroViewIds": [],
       "skipIntroLabels": [
-        "| evil | @foodlbs [x](https://evil.com)"
+        "| evil | @foodlbs [x](https://evil.com)",
+        "x"
       ],
       "skipRecapViewIds": [],
       "skipRecapLabels": [],
