@@ -23,6 +23,11 @@ Found a broken or missing identifier? PRs welcome — see the schema in the
 and capture identifiers with the app's debug Node Inspector. Please include the
 app version and a snippet of the Logcat dump that shows the node.
 
+Most submissions arrive automatically: the app's one-tap contribution flow posts
+button data to a small ingestion service, which validates, deduplicates, and opens
+a PR here (one per package, with report counts). Schema CI runs on every PR;
+nothing is published without a human merge.
+
 ## License
 
 [Apache License 2.0](https://github.com/foodlbs/skipperkit/blob/main/LICENSE),
