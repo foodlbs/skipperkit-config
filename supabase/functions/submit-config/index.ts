@@ -64,6 +64,34 @@ Deno.serve(async (req) => {
     }
   }
 
+  // Custom buttons follow the same upsert, stored as target CUSTOM with a
+  // display name (first reporter's name wins; later reports only bump counts).
+  for (const c of sub.customButtons) {
+    const published = isPublished(config, sub.packageName, { target: "CUSTOM", viewId: c.viewId, label: c.label });
+    let query: any = db.from("submissions").select()
+      .eq("package", sub.packageName).eq("target", "CUSTOM");
+    query = c.viewId === null ? query.is("view_id", null) : query.eq("view_id", c.viewId);
+    query = c.label === null ? query.is("label", null) : query.eq("label", c.label);
+    const { data: existing } = await query.maybeSingle();
+    if (existing) {
+      await db.from("submissions").update({
+        report_count: existing.report_count + 1,
+        name: existing.name ?? c.name,
+        last_seen: new Date().toISOString(),
+        app_versions: [...new Set([...existing.app_versions, sub.appVersionName].filter(Boolean))].slice(0, 50),
+        locales: [...new Set([...existing.locales, sub.locale].filter(Boolean))].slice(0, 50),
+      }).eq("id", existing.id);
+    } else {
+      await db.from("submissions").insert({
+        package: sub.packageName, target: "CUSTOM",
+        view_id: c.viewId, label: c.label, name: c.name,
+        app_versions: [sub.appVersionName].filter(Boolean),
+        locales: [sub.locale].filter(Boolean),
+        status: published ? "merged" : "pending",
+      });
+    }
+  }
+
   // Publish every pending + pr_open row for this package as one PR. Gate on a
   // pending row existing: new entries AND previously failed publishes trigger
   // GitHub calls; pure duplicates of already-PR'd entries don't.
@@ -80,7 +108,7 @@ Deno.serve(async (req) => {
     }
   }
 
-  return new Response(JSON.stringify({ accepted: sub.buttons.length }), {
+  return new Response(JSON.stringify({ accepted: sub.buttons.length + sub.customButtons.length }), {
     status: 200, headers: { "Content-Type": "application/json" },
   });
 });

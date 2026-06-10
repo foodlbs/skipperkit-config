@@ -19,7 +19,7 @@ Deno.test("accepts a valid payload", () => {
 });
 
 Deno.test("rejects wrong format marker / version", () => {
-  assertEquals(validate({ ...good, skipperkitContribution: 2 }).ok, false);
+  assertEquals(validate({ ...good, skipperkitContribution: 3 }).ok, false);
   assertEquals(validate({ packageName: "com.hulu.plus", buttons: [] }).ok, false);
 });
 
@@ -58,6 +58,93 @@ Deno.test("caps buttons at 20 and strings at 256", () => {
 
   const long = validate({ ...good, buttons: [{ target: "SKIP_INTRO", label: "x".repeat(9999) }] });
   if (long.ok) assertEquals(long.value.buttons[0].label!.length, 256);
+});
+
+Deno.test("v2: custom buttons parsed; alone they make a payload valid", () => {
+  const r = validate({
+    ...good,
+    skipperkitContribution: 2,
+    buttons: [],
+    customButtons: [{ name: "Dismiss rating", viewId: "com.hulu.plus:id/dismiss", label: null }],
+  });
+  assertEquals(r.ok, true);
+  if (r.ok) {
+    assertEquals(r.value.buttons.length, 0);
+    assertEquals(r.value.customButtons.length, 1);
+    assertEquals(r.value.customButtons[0].name, "Dismiss rating");
+  }
+});
+
+Deno.test("v1 payloads have no custom buttons and stay valid", () => {
+  const r = validate(good);
+  assertEquals(r.ok, true);
+  if (r.ok) assertEquals(r.value.customButtons.length, 0);
+});
+
+Deno.test("risky custom buttons are dropped; nameless or matchless ones too", () => {
+  const r = validate({
+    ...good,
+    skipperkitContribution: 2,
+    customButtons: [
+      { name: "Confirm purchase", viewId: "com.hulu.plus:id/buy_now", label: null },
+      { name: "Send", viewId: null, label: "Send message" },
+      { name: "No matcher", viewId: null, label: null },
+      { viewId: "com.hulu.plus:id/x", label: null },
+      { name: "Dismiss", viewId: "com.hulu.plus:id/dismiss", label: null },
+    ],
+  });
+  assertEquals(r.ok, true);
+  if (r.ok) {
+    assertEquals(r.value.customButtons.length, 1);
+    assertEquals(r.value.customButtons[0].name, "Dismiss");
+  }
+});
+
+Deno.test("risky words in the view-id tail are caught", () => {
+  const r = validate({
+    ...good,
+    skipperkitContribution: 2,
+    buttons: [],
+    customButtons: [{ name: "OK", viewId: "com.hulu.plus:id/confirm_order_button", label: null }],
+  });
+  assertEquals(r.ok, false); // nothing survives
+});
+
+Deno.test("consent-shaped custom buttons are rejected too", () => {
+  const r = validate({
+    ...good,
+    skipperkitContribution: 2,
+    buttons: [],
+    customButtons: [
+      { name: "Agree and continue", viewId: "com.hulu.plus:id/x", label: null },
+      { name: "OK", viewId: "com.hulu.plus:id/accept_terms", label: null },
+    ],
+  });
+  assertEquals(r.ok, false);
+});
+
+Deno.test("embedded control characters are collapsed to spaces", () => {
+  const r = validate({
+    ...good,
+    buttons: [{ target: "SKIP_INTRO", viewId: null, label: "Skip\nIntro\trow" }],
+  });
+  assertEquals(r.ok, true);
+  if (r.ok) assertEquals(r.value.buttons[0].label, "Skip Intro row");
+});
+
+Deno.test("custom buttons capped at 20, names at 50", () => {
+  const many = Array.from({ length: 60 }, (_, i) => ({
+    name: `b${i}`, viewId: `com.hulu.plus:id/b${i}`, label: null,
+  }));
+  const r = validate({ ...good, skipperkitContribution: 2, customButtons: many });
+  assertEquals(r.ok, true);
+  if (r.ok) assertEquals(r.value.customButtons.length, 20);
+
+  const long = validate({
+    ...good, skipperkitContribution: 2,
+    customButtons: [{ name: "x".repeat(200), viewId: "com.hulu.plus:id/y", label: null }],
+  });
+  if (long.ok) assertEquals(long.value.customButtons[0].name.length, 50);
 });
 
 Deno.test("metadata is optional and capped", () => {
