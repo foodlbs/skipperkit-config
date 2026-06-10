@@ -28,6 +28,18 @@ button data to a small ingestion service, which validates, deduplicates, and ope
 a PR here (one per package, with report counts). Schema CI runs on every PR;
 nothing is published without a human merge.
 
+Since payload v2 the flow also carries **custom taught buttons** (arbitrary
+buttons users teach the app to tap, e.g. "Skip Ad"). Two policies apply:
+
+- The ingestion service rejects custom buttons whose name, label, or view-id
+  looks payment-, destruction-, or consent-shaped (`pay`, `buy`, `delete`,
+  `accept`, `agree`, `continue`, …). The filter is deliberately over-broad: a
+  legitimately named button it blocks (say "Continue watching") can still be
+  proposed as a manual PR here, where a human can judge the context.
+- Custom buttons land in PRs with `"enabled": false`. Enabling one — making
+  every install auto-tap it — is an editorial decision the maintainer takes
+  during review by flipping the flag.
+
 ## License
 
 [Apache License 2.0](https://github.com/foodlbs/skipperkit/blob/main/LICENSE),
