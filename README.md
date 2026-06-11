@@ -40,6 +40,20 @@ buttons users teach the app to tap, e.g. "Skip Ad"). Two policies apply:
   every install auto-tap it — is an editorial decision the maintainer takes
   during review by flipping the flag.
 
+## Repo layout
+
+- [`config.json`](config.json) — the served configuration; validated on every PR.
+- [`supabase/functions/submit-config/`](supabase/functions/submit-config/) — the
+  ingestion edge function (validate, dedupe, open PR) with Deno tests.
+- [`supabase/migrations/`](supabase/migrations/) — reference copy of the database
+  schema deployed to the project; migrations were applied via the Supabase
+  management API and recorded here so the schema is reviewable.
+- [`scripts/validate_config.py`](scripts/validate_config.py) — the schema CI
+  used by `.github/workflows/validate.yml`. Mirrors what the app's
+  `RemoteConfigParser` will accept.
+- [`.github/workflows/keep-alive.yml`](.github/workflows/keep-alive.yml) — pings
+  the Supabase project twice a week so the free tier doesn't auto-pause it.
+
 ## License
 
 [Apache License 2.0](https://github.com/foodlbs/skipperkit/blob/main/LICENSE),
